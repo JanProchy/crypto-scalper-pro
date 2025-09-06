@@ -30,12 +30,12 @@ jobs:
         run: npm run build:gh
 
       - name: Add 404.html (SPA redirect)
-        run: cp dist/crypto-scalper-pro-ng/index.html dist/crypto-scalper-pro-ng/404.html
+        run: cp dist/crypto-scalper-pro-ng/browser/index.html dist/crypto-scalper-pro-ng/browser/404.html
 
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist/crypto-scalper-pro-ng
+          publish_dir: dist/crypto-scalper-pro-ng/browser
           force_orphan: true
           commit_message: "Deploy: ${{ github.sha }}"
