@@ -1,30 +1,36 @@
-name: Deploy to GitHub Pages
+name: Deploy Angular App to GitHub Pages
 
 on:
   push:
     branches:
-      - main
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+      - main # Nebo master, podle toho, jakou větev používáte pro hlavní kód
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          path: crypto-scalper-pro
+          node-version: '20' # Použijte verzi Node.js, která je kompatibilní s vaším Angular projektem
+
+      - name: Install Dependencies
+        run: npm ci # 'npm ci' je lepší pro CI/CD než 'npm install', protože zajišťuje čistou instalaci z package-lock.json
+
+      - name: Build Angular Application
+        # Nahraďte 'your-angular-app' názvem vašeho projektu z angular.json (projects.your-angular-app)
+        # base-href musí odpovídat názvu vašeho repozitáře (např. 'your-repo-name' pro https://username.github.io/your-repo-name/)
+        # output-path by měl odpovídat cestě, kde ng build ukládá soubory, často dist/<nazev_projektu>
+        run: |
+          npm run build -- --output-path=dist/github-pages --base-href=/${{ github.event.repository.name }}/
 
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist/github-pages # Toto musí odpovídat output-path z předchozího kroku
+          # publish_branch: gh-pages # Výchozí je gh-pages, můžete specifikovat, pokud chcete jinou
