@@ -13,5 +13,5 @@ import { PerformancePanel } from './components/performance-panel/performance-pan
   styleUrl: './app.scss',
 })
 export class App {
-  protected readonly title = signal('crypto-scalper-pro-ng');
+  protected readonly title = signal('crypto-scalper-pro');
 }

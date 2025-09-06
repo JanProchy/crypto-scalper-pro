@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "crypto-scalper-pro-ng": {
+    "crypto-scalper-pro": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -58,10 +58,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "crypto-scalper-pro-ng:build:production"
+              "buildTarget": "crypto-scalper-pro:build:production"
             },
             "development": {
-              "buildTarget": "crypto-scalper-pro-ng:build:development"
+              "buildTarget": "crypto-scalper-pro:build:development"
             }
           },
           "defaultConfiguration": "development"

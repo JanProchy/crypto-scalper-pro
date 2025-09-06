@@ -1,11 +1,11 @@
 {
-  "name": "crypto-scalper-pro-ng",
+  "name": "crypto-scalper-pro",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:gh": "ng build --base-href /crypto-scalper-pro/ --output-path dist/crypto-scalper-pro-ng",
+    "build:gh": "ng build --base-href /crypto-scalper-pro/ --output-path dist/crypto-scalper-pro",
     "deploy": "echo 'Use GitHub Actions workflow: Deploy to GH Pages'",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

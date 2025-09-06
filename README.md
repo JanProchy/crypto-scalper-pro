@@ -68,7 +68,7 @@ This repository is configured to deploy the Angular application to **GitHub Page
 	- Installs dependencies with `npm ci`.
 	- Builds the app using a base href: `/crypto-scalper-pro/`.
 	- Copies `index.html` to `404.html` (SPA deep-link support).
-	- Publishes the `dist/crypto-scalper-pro-ng` directory to the `gh-pages` branch (force orphan commit).
+	- Publishes the `dist/crypto-scalper-pro` directory to the `gh-pages` branch (force orphan commit).
 
 ### Manual trigger
 
@@ -85,7 +85,7 @@ You can also trigger it manually:
 
 ```bash
 npm run build:gh
-npx http-server dist/crypto-scalper-pro-ng
+npx http-server dist/crypto-scalper-pro
 ```
 
 ### Changing repository or custom domain
