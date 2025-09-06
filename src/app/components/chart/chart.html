@@ -1,0 +1,55 @@
+<!-- Chart Section -->
+<div class="card chart-section">
+  <div class="chart-header">
+    <div class="chart-title">📈 Real-time Chart + Indicators</div>
+    <div class="timeframe-selector">
+      @for(tf of ['1m', '3m', '5m', '15m', '1h']; track tf) {
+      <button
+        class="tf-btn"
+        [class.active]="currentState().currentTimeframe === tf"
+        (click)="onTimeframeChange(tf)"
+      >
+        {{ tf }}
+      </button>
+      }
+    </div>
+  </div>
+
+  <div class="chart-display" id="chart-display">
+    <div class="indicators-overlay" id="indicators-overlay">
+      @if(currentState().indicators.ema8.length > 0) {
+      <div class="indicator-line ema8">
+        EMA8:
+        {{
+          currentState().indicators.ema8[
+            currentState().indicators.ema8.length - 1
+          ] | number : "1.2-4"
+        }}
+      </div>
+      <div class="indicator-line ema21">
+        EMA21:
+        {{
+          currentState().indicators.ema21[
+            currentState().indicators.ema21.length - 1
+          ] | number : "1.2-4"
+        }}
+      </div>
+      <div class="indicator-line ema50">
+        EMA50:
+        {{
+          currentState().indicators.ema50[
+            currentState().indicators.ema50.length - 1
+          ] | number : "1.2-4"
+        }}
+      </div>
+      <div class="indicator-line market-price">
+        Market Price:
+        {{ state.getCurrentMarketPrice() | number : "1.2-4" }}
+      </div>
+      }
+    </div>
+    <div class="candlestick-container" #chartContainer>
+      <!-- Chart will be rendered here by lightweight-charts -->
+    </div>
+  </div>
+</div>

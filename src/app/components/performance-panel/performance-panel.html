@@ -1,0 +1,265 @@
+<!-- Performance Panel -->
+<div class="execution-panel">
+  <!-- UI Status Wiring -->
+  <div class="card">
+    <div class="chart-title">🔗 UI Status Wiring</div>
+
+    <div class="status-grid">
+      <div class="status-item">
+        <div class="status-label">EMA Stack</div>
+        <div
+          class="status-badge"
+          [ngClass]="{
+            valid: currentState().gates.trendStack,
+            invalid: !currentState().gates.trendStack
+          }"
+        >
+          {{ currentState().gates.trendStack ? "🟢 VALID" : "🔴 INVALID" }}
+        </div>
+        <div class="status-value">
+          8>21>50: {{ currentState().gates.trendStack ? "TRUE" : "FALSE" }}
+        </div>
+      </div>
+
+      <div class="status-item">
+        <div class="status-label">BOS Signal</div>
+        <div
+          class="status-badge"
+          [ngClass]="{
+            valid: currentState().gates.bosDirection,
+            invalid: !currentState().gates.bosDirection
+          }"
+        >
+          {{ currentState().gates.bosDirection ? "🟢 VALID" : "🔴 INVALID" }}
+        </div>
+        <div class="status-value">
+          {{
+            currentState().gates.bosDirection ? "Break Detected" : "No Break"
+          }}
+        </div>
+      </div>
+
+      <div class="status-item">
+        <div class="status-label">50% Retest</div>
+        <div
+          class="status-badge"
+          [ngClass]="{
+            valid: currentState().gates.fiftyPercentRetest,
+            invalid: !currentState().gates.fiftyPercentRetest
+          }"
+        >
+          {{
+            currentState().gates.fiftyPercentRetest ? "🟢 VALID" : "🔴 INVALID"
+          }}
+        </div>
+        <div class="status-value">
+          {{
+            currentState().gates.fiftyPercentRetest ? "In Zone" : "Outside Zone"
+          }}
+        </div>
+      </div>
+
+      <div class="status-item">
+        <div class="status-label">Volume Spike</div>
+        <div
+          class="status-badge"
+          [ngClass]="{
+            valid: currentState().gates.volumeSpike,
+            invalid: !currentState().gates.volumeSpike
+          }"
+        >
+          {{ currentState().gates.volumeSpike ? "🟢 VALID" : "🔴 INVALID" }}
+        </div>
+        <div class="status-value">
+          {{
+            (
+              currentState().indicators.volume[
+                currentState().indicators.volume.length - 1
+              ] || {}
+            ).ratio | number : "1.1-1"
+          }}x Normal
+        </div>
+      </div>
+
+      <!-- RSI and ATR status logic to be refined -->
+      <div class="status-item">
+        <div class="status-label">RSI Level</div>
+        <div class="status-badge borderline">⚠️ BORDERLINE</div>
+        <div class="status-value">
+          {{
+            currentState().indicators.rsi14[
+              currentState().indicators.rsi14.length - 1
+            ] | number : "1.1-1"
+          }}
+        </div>
+      </div>
+
+      <div class="status-item">
+        <div class="status-label">ATR Volatility</div>
+        <div class="status-badge valid">🟢 VALID</div>
+        <div class="status-value">
+          {{
+            currentState().indicators.atr14[
+              currentState().indicators.atr14.length - 1
+            ] | number : "1.2-4"
+          }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Snapshot System -->
+  <div class="card">
+    <div class="chart-title">📸 Snapshot System</div>
+
+    <div class="snapshot-controls">
+      <button class="control-btn" (click)="captureSnapshot()">
+        📸 Capture
+      </button>
+      <button class="control-btn" (click)="exportSnapshot()">💾 Export</button>
+      <input
+        type="file"
+        #snapshotImport
+        (change)="importSnapshot($event)"
+        accept=".json"
+        style="display: none"
+      />
+      <button class="control-btn" (click)="snapshotImport.click()">
+        📂 Import
+      </button>
+    </div>
+
+    <div class="snapshot-preview" id="snapshot-preview">
+      @if (lastSnapshot) {
+      <div class="snapshot-meta">
+        <div><strong>ID:</strong> {{ lastSnapshot.meta.id }}</div>
+        <div><strong>Time:</strong> {{ lastSnapshot.meta.timestamp }}</div>
+        <div><strong>Symbol:</strong> {{ lastSnapshot.meta.symbol }}</div>
+        <div><strong>TF:</strong> {{ lastSnapshot.meta.timeframe }}</div>
+        <div><strong>Engine:</strong> {{ lastSnapshot.meta.engine }}</div>
+      </div>
+      <pre class="snapshot-json">{{ lastSnapshot.state | json }}</pre>
+      <button class="control-btn" (click)="reloadLastSnapshot()">
+        🔄 Load Last
+      </button>
+      } @else {
+      <div class="log-entry info">No snapshot captured yet...</div>
+      }
+    </div>
+  </div>
+
+  <!-- Mini Backtest -->
+  <div class="card">
+    <div class="chart-title">🧪 Mini Backtest (20 Setups)</div>
+
+    <div class="backtest-controls">
+      <button class="control-btn" (click)="runMiniBacktest()">
+        🚀 Run Test
+      </button>
+      <button class="control-btn" (click)="generateHistoricalSetups()">
+        📊 Generate Setups
+      </button>
+      <button class="control-btn" (click)="clearBacktestResults()">
+        🗑️ Clear
+      </button>
+    </div>
+
+    <div class="backtest-metrics">
+      <div class="metric-item">
+        <div
+          class="metric-value"
+          [ngClass]="{
+            'expectancy-positive':
+              currentState().backtestResults.expectancy >= 0,
+            'expectancy-negative': currentState().backtestResults.expectancy < 0
+          }"
+        >
+          {{ currentState().backtestResults.expectancy | number : "1.2-2" }}R
+        </div>
+        <div class="metric-label">Expectancy</div>
+      </div>
+
+      <div class="metric-item">
+        <div class="metric-value">
+          {{ currentState().backtestResults.hitRate | number : "1.1-1" }}%
+        </div>
+        <div class="metric-label">Hit Rate</div>
+      </div>
+
+      <div class="metric-item">
+        <div class="metric-value">
+          {{ currentState().backtestResults.avgR | number : "1.2-2" }}R
+        </div>
+        <div class="metric-label">Avg R</div>
+      </div>
+
+      <div class="metric-item">
+        <div class="metric-value">
+          {{ currentState().backtestResults.maxDD | number : "1.1-1" }}%
+        </div>
+        <div class="metric-label">Max DD</div>
+      </div>
+
+      <div class="metric-item">
+        <div
+          class="metric-value"
+          [ngClass]="{
+            'adherence-high':
+              currentState().backtestResults.ruleAdherence >= 90,
+            'adherence-medium':
+              currentState().backtestResults.ruleAdherence >= 70 &&
+              currentState().backtestResults.ruleAdherence < 90,
+            'adherence-low': currentState().backtestResults.ruleAdherence < 70
+          }"
+        >
+          {{ currentState().backtestResults.ruleAdherence | number : "1.1-1" }}%
+        </div>
+        <div class="metric-label">Rule Adherence</div>
+      </div>
+
+      <div class="metric-item">
+        <div class="metric-value">
+          {{ currentState().backtestResults.varianceR | number : "1.2-2" }}
+        </div>
+        <div class="metric-label">Variance R</div>
+      </div>
+    </div>
+
+    <div class="calculation-log" id="backtest-log">
+      <div class="log-entry info">Ready to run mini backtest...</div>
+    </div>
+  </div>
+
+  <!-- Performance Metrics -->
+  <!-- <div class="card">
+    <div class="chart-title">📊 Live Performance</div>
+
+    <div class="performance-metrics">
+      <div class="metric-item">
+        <div class="metric-value">
+          {{ currentState().performance.signalsGenerated }}
+        </div>
+        <div class="metric-label">Signals Generated</div>
+      </div>
+
+      <div class="metric-item">
+        <div class="metric-value">
+          {{ currentState().performance.accuracyRate }}%
+        </div>
+        <div class="metric-label">Live Accuracy</div>
+      </div>
+
+      <div class="metric-item">
+        <div class="metric-value">{{ currentState().performance.avgRR }}</div>
+        <div class="metric-label">Avg R:R</div>
+      </div>
+
+      <div class="metric-item">
+        <div class="metric-value">
+          {{ currentState().performance.tvDeviation }}%
+        </div>
+        <div class="metric-label">TV Deviation</div>
+      </div>
+    </div>
+  </div> -->
+</div>

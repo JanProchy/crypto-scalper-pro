@@ -1,0 +1,81 @@
+<!-- Technical Indicators -->
+<div class="card technical-indicators">
+  <div class="chart-title">🔬 Technical Indicators Pipeline</div>
+
+  @if(currentState().indicators.ema8.length > 0) {
+  <div class="indicator-grid">
+    <div class="indicator-item">
+      <div class="indicator-label">EMA 8</div>
+      <div class="indicator-value ema8">
+        {{ getLatestNumericIndicator("ema8") | number : "1.2-4" }}
+      </div>
+      <div class="indicator-change neutral">+0.00%</div>
+      <!-- Change logic to be implemented -->
+    </div>
+
+    <div class="indicator-item">
+      <div class="indicator-label">EMA 21</div>
+      <div class="indicator-value ema21">
+        {{ getLatestNumericIndicator("ema21") | number : "1.2-4" }}
+      </div>
+      <div class="indicator-change neutral">+0.00%</div>
+    </div>
+
+    <div class="indicator-item">
+      <div class="indicator-label">EMA 50</div>
+      <div class="indicator-value ema50">
+        {{ getLatestNumericIndicator("ema50") | number : "1.2-4" }}
+      </div>
+      <div class="indicator-change neutral">+0.00%</div>
+    </div>
+
+    <div class="indicator-item market-price">
+      <div>
+        <div class="indicator-label">Market Price</div>
+        <div class="indicator-value market-price-number">
+          {{ state.getCurrentMarketPrice() | number : "1.2-4" }}
+        </div>
+      </div>
+    </div>
+
+    <div class="indicator-item">
+      <div class="indicator-label">RSI 14</div>
+      <div class="indicator-value rsi">
+        {{ getLatestNumericIndicator("rsi14") | number : "1.2-2" }}
+      </div>
+      <div class="indicator-change neutral">+0.00</div>
+    </div>
+
+    <div class="indicator-item">
+      <div class="indicator-label">ATR 14</div>
+      <div class="indicator-value atr">
+        {{ getLatestNumericIndicator("atr14") | number : "1.2-4" }}
+      </div>
+      <div class="indicator-change neutral">+0.00%</div>
+    </div>
+
+    <div class="indicator-item">
+      <div class="indicator-label">Volume Ratio</div>
+      <div class="indicator-value">
+        {{ getLatestVolume()?.ratio | number : "1.2-2" }}x
+      </div>
+      <div class="indicator-change neutral">Normal</div>
+    </div>
+  </div>
+  } @else {
+  <div class="indicator-grid">
+    <div class="indicator-item" *ngFor="let i of [1, 2, 3, 4, 5, 6]">
+      <div class="indicator-label">Loading...</div>
+      <div class="indicator-value">--</div>
+    </div>
+  </div>
+  }
+
+  <div class="calculation-log" #calcLog>
+    @for (log of currentState().logs; track $index) {
+    <div class="log-entry" [ngClass]="log.type">
+      {{ log.timestamp }}: {{ log.message }}
+    </div>
+    }
+  </div>
+</div>

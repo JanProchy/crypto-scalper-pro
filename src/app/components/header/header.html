@@ -1,0 +1,131 @@
+<!-- Pipeline Header -->
+<div class="card pipeline-header">
+  <div class="pipeline-title">🔧 Crypto Scalper Pro</div>
+  <div class="pipeline-controls">
+    <button
+      class="control-btn"
+      [class.active]="currentState().autoCalculation"
+      (click)="toggleAutoCalc()"
+    >
+      {{ currentState().autoCalculation ? "🔄 Auto Calc" : "⏸️ Manual" }}
+    </button>
+    <button class="control-btn" (click)="fetchData()">📊 Load Data</button>
+    <!-- <button class="control-btn" (click)="validateIndicators()">
+      ✅ Validate TV
+    </button> -->
+    <select
+      class="control-btn"
+      [value]="currentState().currentSymbol"
+      (change)="onSymbolChange($event)"
+    >
+      <!-- Major Cryptocurrencies -->
+      <option value="BTCUSDT">BTC/USDT</option>
+      <option value="ETHUSDT">ETH/USDT</option>
+      <option value="SOLUSDT" selected>SOL/USDT</option>
+      <option value="ADAUSDT">ADA/USDT</option>
+      <option value="XRPUSDT">XRP/USDT</option>
+      <option value="DOTUSDT">DOT/USDT</option>
+      <option value="AVAXUSDT">AVAX/USDT</option>
+      <option value="MATICUSDT">MATIC/USDT</option>
+      <option value="LINKUSDT">LINK/USDT</option>
+      <option value="ATOMUSDT">ATOM/USDT</option>
+
+      <!-- Layer 1 & Layer 2 -->
+      <option value="BNBUSDT">BNB/USDT</option>
+      <option value="NEARUSDT">NEAR/USDT</option>
+      <option value="FTMUSDT">FTM/USDT</option>
+      <option value="ALGOUSDT">ALGO/USDT</option>
+      <option value="ICPUSDT">ICP/USDT</option>
+      <option value="APTUSDT">APT/USDT</option>
+      <option value="SUIUSDT">SUI/USDT</option>
+      <option value="ARBUSDT">ARB/USDT</option>
+      <option value="OPUSDT">OP/USDT</option>
+
+      <!-- DeFi Tokens -->
+      <option value="UNIUSDT">UNI/USDT</option>
+      <option value="AAVEUSDT">AAVE/USDT</option>
+      <option value="SUSHIUSDT">SUSHI/USDT</option>
+      <option value="COMPUSDT">COMP/USDT</option>
+      <option value="MKRUSDT">MKR/USDT</option>
+      <option value="CRVUSDT">CRV/USDT</option>
+      <option value="1INCHUSDT">1INCH/USDT</option>
+      <option value="SNXUSDT">SNX/USDT</option>
+      <option value="YFIUSDT">YFI/USDT</option>
+
+      <!-- Meme Coins -->
+      <option value="DOGEUSDT">DOGE/USDT</option>
+      <option value="SHIBUSDT">SHIB/USDT</option>
+      <option value="PEPEUSDT">PEPE/USDT</option>
+      <option value="FLOKIUSDT">FLOKI/USDT</option>
+      <option value="BONKUSDT">BONK/USDT</option>
+      <option value="WIFUSDT">WIF/USDT</option>
+
+      <!-- Gaming & Metaverse -->
+      <option value="AXSUSDT">AXS/USDT</option>
+      <option value="SANDUSDT">SAND/USDT</option>
+      <option value="MANAUSDT">MANA/USDT</option>
+      <option value="ENJUSDT">ENJ/USDT</option>
+      <option value="GALAUSDT">GALA/USDT</option>
+      <option value="CHZUSDT">CHZ/USDT</option>
+
+      <!-- AI & Data -->
+      <option value="FETUSDT">FET/USDT</option>
+      <option value="OCEANUSDT">OCEAN/USDT</option>
+      <option value="AGIXUSDT">AGIX/USDT</option>
+      <option value="RENDERUSDT">RENDER/USDT</option>
+
+      <!-- Infrastructure -->
+      <option value="FILUSDT">FIL/USDT</option>
+      <option value="ARUSDT">AR/USDT</option>
+      <option value="STORJUSDT">STORJ/USDT</option>
+      <option value="HBARUSDT">HBAR/USDT</option>
+      <option value="VETUSDT">VET/USDT</option>
+      <option value="XLMUSDT">XLM/USDT</option>
+
+      <!-- Privacy Coins -->
+      <option value="XMRUSDT">XMR/USDT</option>
+      <option value="ZECUSDT">ZEC/USDT</option>
+      <option value="DASHUSDT">DASH/USDT</option>
+
+      <!-- Exchange Tokens -->
+      <option value="CAKEUSDT">CAKE/USDT</option>
+      <option value="GMXUSDT">GMX/USDT</option>
+      <option value="DYDXUSDT">DYDX/USDT</option>
+
+      <!-- Emerging Altcoins -->
+      <option value="INJUSDT">INJ/USDT</option>
+      <option value="THETAUSDT">THETA/USDT</option>
+      <option value="ROSEUSDT">ROSE/USDT</option>
+      <option value="LDOUSDT">LDO/USDT</option>
+      <option value="IMXUSDT">IMX/USDT</option>
+      <option value="STXUSDT">STX/USDT</option>
+      <option value="TIAUSDT">TIA/USDT</option>
+      <option value="ORDIUSDT">ORDI/USDT</option>
+      <option value="SEIUSDT">SEI/USDT</option>
+      <option value="JUPUSDT">JUP/USDT</option>
+
+      <!-- Stablecoins & Wrapped -->
+      <option value="WBTCUSDT">WBTC/USDT</option>
+      <option value="STETHUSDT">STETH/USDT</option>
+
+      <!-- Popular Trading Pairs -->
+      <option value="LTCUSDT">LTC/USDT</option>
+      <option value="BCHUSDT">BCH/USDT</option>
+      <option value="ETCUSDT">ETC/USDT</option>
+      <option value="TRXUSDT">TRX/USDT</option>
+      <option value="EOSUSDT">EOS/USDT</option>
+
+      <!-- New Listings & Trending -->
+      <option value="WLDUSDT">WLD/USDT</option>
+      <option value="ARKMUSDT">ARKM/USDT</option>
+      <option value="BLURUSDT">BLUR/USDT</option>
+      <option value="MAGICUSDT">MAGIC/USDT</option>
+      <option value="PENDLEUSDT">PENDLE/USDT</option>
+      <option value="RDNTUSDT">RDNT/USDT</option>
+      <option value="KASUSDT">KAS/USDT</option>
+      <option value="CFXUSDT">CFX/USDT</option>
+      <option value="COREUSDT">CORE/USDT</option>
+      <option value="AGLDUSDT">AGLD/USDT</option>
+    </select>
+  </div>
+</div>

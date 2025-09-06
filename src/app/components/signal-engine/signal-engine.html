@@ -1,0 +1,155 @@
+<!-- Signal Engine Panel -->
+<div class="signal-engine">
+  <!-- Engine Status -->
+  <div class="card">
+    <div class="chart-title">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 12px;
+        "
+      >
+        <div style="font-size: 0.875rem; font-weight: 600">
+          🚦 Signal Engine Status
+        </div>
+        <div style="display: flex; gap: 8px">
+          <button
+            class="control-btn"
+            (click)="generateTradingViewAlert()"
+            style="padding: 4px 8px; font-size: 0.75rem"
+          >
+            📺 Download Signal
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="engine-status"
+      [ngClass]="currentState().signalEngine.toLowerCase().replace('_', '-')"
+    >
+      @switch (currentState().signalEngine) { @case ('NO_TRADE') { 🚫 NO_TRADE }
+      @case ('SETUP') { ⚠️ SETUP FORMING } @case ('ENTRY') { 🚀 ENTRY SIGNAL } }
+    </div>
+  </div>
+
+  <!-- Gates Validation -->
+  <div class="card">
+    <div class="chart-title">
+      🚪 Gates Validation ({{
+        getNumberOfValidGates() + "/" + getNumberOfGates()
+      }})
+    </div>
+
+    <div class="gates-section">
+      <div class="gate-item" [class.passed]="currentState().gates.trendStack">
+        <div class="gate-title">
+          <div
+            class="gate-status"
+            [class.passed]="currentState().gates.trendStack"
+          >
+            {{ currentState().gates.trendStack ? "✓" : "✗" }}
+          </div>
+          Trend Stack
+        </div>
+
+        @let e8 = getLatestNumericIndicator("ema8"); @let e21 =
+        getLatestNumericIndicator("ema21"); @let e50 =
+        getLatestNumericIndicator("ema50"); @if (e8 && e21 && e50 &&
+        currentState().indicators.ema8.length) {
+
+        <div class="gate-details">
+          @if (e8 > e21 && e21 > e50) {
+          <span>EMA8 > 21 > 50 (LONG)</span>
+          } @else if (e8 < e21 && e21 < e50) {
+          <span>EMA8 < 21 < 50 (SHORT)</span>
+          } @else { <span>Neutral Stack</span> }
+        </div>
+        <div class="gate-value">
+          <div>
+            {{
+              e8 > e21 && e21 > e50
+                ? "LONG aligned"
+                : e8 < e21 && e21 < e50
+                ? "SHORT aligned"
+                : "Not aligned"
+            }}
+          </div>
+          <!-- <div>8: {{ e8 | number : "1.2-2" }}</div>
+          <div>21: {{ e21 | number : "1.2-2" }}</div>
+          <div>50: {{ e50 | number : "1.2-2" }}</div> -->
+        </div>
+        } @else { <span>Loading...</span> }
+      </div>
+
+      <div class="gate-item" [class.passed]="currentState().gates.bosDirection">
+        <div class="gate-title">
+          <div
+            class="gate-status"
+            [class.passed]="currentState().gates.bosDirection"
+          >
+            {{ currentState().gates.bosDirection ? "✓" : "✗" }}
+          </div>
+          BOS Direction
+        </div>
+        <div class="gate-details">Break of Structure</div>
+        <div class="gate-value">
+          {{
+            currentState().gates.bosDirection ? "Recent BOS detected" : "No BOS"
+          }}
+        </div>
+      </div>
+
+      <div
+        class="gate-item"
+        [class.passed]="currentState().gates.fiftyPercentRetest"
+      >
+        <div class="gate-title">
+          <div
+            class="gate-status"
+            [class.passed]="currentState().gates.fiftyPercentRetest"
+          >
+            {{ currentState().gates.fiftyPercentRetest ? "✓" : "✗" }}
+          </div>
+          50% Retest
+        </div>
+        <div class="gate-details">Mid-level retest</div>
+        <div class="gate-value">
+          {{
+            currentState().gates.fiftyPercentRetest ? "In zone" : "Outside zone"
+          }}
+        </div>
+      </div>
+
+      <div class="gate-item" [class.passed]="currentState().gates.volumeSpike">
+        <div class="gate-title">
+          <div
+            class="gate-status"
+            [class.passed]="currentState().gates.volumeSpike"
+          >
+            {{ currentState().gates.volumeSpike ? "✓" : "✗" }}
+          </div>
+          Volume Spike
+        </div>
+        <div class="gate-details">≥1.5x + absorption</div>
+        <div class="gate-value">
+          @let vols = currentState().indicators.volume; @if (vols.length) { @let
+          lastVol = vols[vols.length - 1];
+          <span>
+            {{
+              currentState().gates.volumeSpike
+                ? (lastVol.ratio | number : "1.2-2") + "x spike"
+                : (lastVol.ratio | number : "1.2-2") + "x"
+            }}
+            {{ lastVol.absorption ? "+ absorption" : "" }}
+          </span>
+          } @else { Loading... }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Execution Parameters are now part of this component -->
+  <app-execution-panel></app-execution-panel>
+</div>

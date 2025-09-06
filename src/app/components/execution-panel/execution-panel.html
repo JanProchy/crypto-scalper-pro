@@ -1,0 +1,70 @@
+<!-- Execution Parameters -->
+<div class="card">
+  <div class="chart-title">🎯 Execution Parameters</div>
+
+  <div class="execution-params">
+    <div class="param-item">
+      <div class="param-label">Entry (Limit)</div>
+      <div class="param-value entry-value">
+        {{ currentState().executionParams.entry | number : "1.2-4" }}
+      </div>
+      <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 2px">
+        Market:
+        {{
+          currentState().executionParams.currentMarketPrice | number : "1.2-4"
+        }}
+      </div>
+    </div>
+
+    <div class="param-item">
+      <div class="param-label">Stop Loss</div>
+      <div class="param-value sl-value">
+        {{ currentState().executionParams.stopLoss | number : "1.2-4" }}
+      </div>
+      <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 2px">
+        -0.0% (-$0.00)
+      </div>
+      <!-- Distance logic to be implemented -->
+    </div>
+
+    <div class="param-item">
+      <div class="param-label">TP1 (1R)</div>
+      <div class="param-value tp-value">
+        {{ currentState().executionParams.tp1 | number : "1.2-4" }}
+      </div>
+      <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 2px">
+        +0.0% (+$0.00)
+      </div>
+    </div>
+
+    <div class="param-item">
+      <div class="param-label">TP2 (2R)</div>
+      <div class="param-value tp-value">
+        {{ currentState().executionParams.tp2 | number : "1.2-4" }}
+      </div>
+      <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 2px">
+        +0.0% (+$0.00)
+      </div>
+    </div>
+
+    <div class="param-item">
+      <div class="param-label">Trailing Stop</div>
+      <div class="param-value ts-value">
+        {{ currentState().executionParams.trailingStop | number : "1.2-4" }}
+      </div>
+      <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 2px">
+        Aktivace: TP1
+      </div>
+    </div>
+
+    <div class="param-item">
+      <div class="param-label">Risk/Reward</div>
+      <div class="param-value">
+        {{ currentState().executionParams.riskReward }}
+      </div>
+      <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 2px">
+        Kvalita: Dobrá
+      </div>
+    </div>
+  </div>
+</div>
