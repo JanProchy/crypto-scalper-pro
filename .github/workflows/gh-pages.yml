@@ -30,31 +30,31 @@ jobs:
         run: npm run build:gh
 
       - name: Add 404.html (SPA redirect)
-        run: cp dist/crypto-scalper-pro-ng/browser/index.html dist/crypto-scalper-pro-ng/browser/404.html
+        run: cp dist/crypto-scalper-pro/browser/index.html dist/crypto-scalper-pro/browser/404.html
 
       - name: Create .nojekyll
-        run: touch dist/crypto-scalper-pro-ng/browser/.nojekyll
+        run: touch dist/crypto-scalper-pro/browser/.nojekyll
 
       - name: Debug dist content
         run: |
           echo '--- DIST LEVEL ---'
           ls -al dist
           echo '--- APP ROOT ---'
-          ls -al dist/crypto-scalper-pro-ng
+          ls -al dist/crypto-scalper-pro
           echo '--- BROWSER ---'
-          ls -al dist/crypto-scalper-pro-ng/browser
-          test -f dist/crypto-scalper-pro-ng/browser/index.html && echo 'Index OK' || echo 'Index MISSING'
+          ls -al dist/crypto-scalper-pro/browser
+          test -f dist/crypto-scalper-pro/browser/index.html && echo 'Index OK' || echo 'Index MISSING'
 
       - name: Fallback index (if missing)
         run: |
-          if [ ! -f dist/crypto-scalper-pro-ng/browser/index.html ]; then
-            echo '<!DOCTYPE html><html><head><meta charset="utf-8"/><title>No Index</title></head><body><h1>Index missing after build.</h1></body></html>' > dist/crypto-scalper-pro-ng/browser/index.html;
+          if [ ! -f dist/crypto-scalper-pro/browser/index.html ]; then
+            echo '<!DOCTYPE html><html><head><meta charset="utf-8"/><title>No Index</title></head><body><h1>Index missing after build.</h1></body></html>' > dist/crypto-scalper-pro/browser/index.html;
           fi
 
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist/crypto-scalper-pro-ng/browser
+          publish_dir: dist/crypto-scalper-pro/browser
           force_orphan: true
           commit_message: "Deploy: ${{ github.sha }}"
