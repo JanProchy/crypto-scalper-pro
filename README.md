@@ -57,3 +57,51 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Deployment (GitHub Pages)
+
+This repository is configured to deploy the Angular application to **GitHub Pages** from the `gh-pages` branch via a GitHub Actions workflow (`.github/workflows/gh-pages.yml`).
+
+### How it works
+
+1. On every push to `main` (or manual trigger via the Actions tab) the workflow:
+	- Installs dependencies with `npm ci`.
+	- Builds the app using a base href: `/crypto-scalper-pro/`.
+	- Copies `index.html` to `404.html` (SPA deep-link support).
+	- Publishes the `dist/crypto-scalper-pro-ng` directory to the `gh-pages` branch (force orphan commit).
+
+### Manual trigger
+
+You can also trigger it manually:
+1. Go to GitHub repo -> Actions -> "Deploy Angular app to GitHub Pages" -> Run workflow.
+
+### First-time setup checklist
+
+- Ensure the repository name matches the base href segment (`/crypto-scalper-pro/`).
+- In GitHub Settings -> Pages: select `Deploy from a branch` -> `gh-pages` / root.
+- Wait for the workflow to finish (1–2 minutes) then open: `https://<your-username>.github.io/crypto-scalper-pro/`.
+
+### Local preview of production build
+
+```bash
+npm run build:gh
+npx http-server dist/crypto-scalper-pro-ng
+```
+
+### Changing repository or custom domain
+
+If you rename the repo or use a custom domain:
+- Update the `--base-href` in `package.json` script `build:gh`.
+- (Optional) Add a `CNAME` file under `public/` with your domain.
+
+### Re-deploy without code changes
+
+Push an empty commit:
+
+```bash
+git commit --allow-empty -m "chore: redeploy"
+git push origin main
+```
+
+---
+Deployment logs are visible in the Actions tab. If something fails, open the latest run and inspect the build / deploy steps.

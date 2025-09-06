@@ -1,0 +1,41 @@
+name: Deploy Angular app to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Angular (GitHub Pages base href)
+        run: npm run build:gh
+
+      - name: Add 404.html (SPA redirect)
+        run: cp dist/crypto-scalper-pro-ng/index.html dist/crypto-scalper-pro-ng/404.html
+
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist/crypto-scalper-pro-ng
+          force_orphan: true
+          commit_message: "Deploy: ${{ github.sha }}"
